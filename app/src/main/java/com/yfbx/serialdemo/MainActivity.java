@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             Log.i(TAG, "返回结果: " + ret);
             setText(ret);
         }
-        serialPort.closeSerial();
+        serialPort.close();
     }
 
     private void setText(final String ret) {

@@ -127,7 +127,7 @@ public class SerialPort {
         return result;
     }
 
-    public void closeSerial() {
+    public void close() {
         closeport(fdx);
     }
 
