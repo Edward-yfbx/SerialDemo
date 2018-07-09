@@ -129,6 +129,7 @@ public class SerialPort {
 
     public void close() {
         closeport(fdx);
+        isOpen = false;
     }
 
     private native int openport_easy(String port, int brd);

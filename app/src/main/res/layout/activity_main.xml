@@ -16,7 +16,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
@@ -26,7 +25,7 @@
                 android:text="串口：" />
 
             <Spinner
-                android:id="@+id/port"
+                android:id="@+id/spinner1"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
@@ -39,19 +38,41 @@
                 android:text="波特率：" />
 
             <Spinner
-                android:id="@+id/baudRate"
+                android:id="@+id/spinner2"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
                 android:background="@drawable/txt_bg" />
 
+
         </LinearLayout>
+
+
+        <CheckBox
+            android:id="@+id/hexBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="十六进制" />
 
 
         <EditText
             android:id="@+id/edit_txt"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@drawable/txt_bg"
+            android:padding="10dp"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/cmd1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/txt_bg"
+            android:padding="10dp"
+            android:text="1502000100082B18" />
+
 
         <Button
             android:id="@+id/send_btn"
@@ -60,6 +81,7 @@
             android:layout_marginTop="16dp"
             android:text="发送" />
 
+
     </LinearLayout>
 
     <View
@@ -67,12 +89,27 @@
         android:layout_height="match_parent"
         android:background="@android:color/darker_gray" />
 
-    <TextView
-        android:id="@+id/ret_txt"
+
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:padding="10dp"
-        tools:text="123" />
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/clear_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:src="@drawable/ic_close" />
+
+        <TextView
+            android:id="@+id/ret_txt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            tools:text="123" />
+    </LinearLayout>
+
 
 </LinearLayout>
