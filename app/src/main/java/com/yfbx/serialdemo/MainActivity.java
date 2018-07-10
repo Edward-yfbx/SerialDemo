@@ -43,7 +43,6 @@ public class MainActivity extends Activity implements View.OnKeyListener, View.O
         hexBtn = findViewById(R.id.hexBtn);
         retTxt = findViewById(R.id.ret_txt);
         findViewById(R.id.send_btn).setOnClickListener(this);
-        findViewById(R.id.cmd1).setOnClickListener(this);
         findViewById(R.id.clear_btn).setOnClickListener(this);
         editText.setOnKeyListener(this);
         retTxt.setMovementMethod(ScrollingMovementMethod.getInstance());
@@ -59,8 +58,8 @@ public class MainActivity extends Activity implements View.OnKeyListener, View.O
         portSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list));
         baudSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, baudList));
 
-        portSpinner.setSelection(10);
-        baudSpinner.setSelection(16);
+        //portSpinner.setSelection(10);
+        //baudSpinner.setSelection(16);
     }
 
 
@@ -70,11 +69,8 @@ public class MainActivity extends Activity implements View.OnKeyListener, View.O
             case R.id.send_btn:
                 sendMsg(editText.getText().toString());
                 break;
-            case R.id.cmd1:
-                sendMsg("1502000100082B18");
-                break;
             case R.id.clear_btn:
-                editText.setText("");
+                retTxt.setText("");
                 break;
         }
     }
