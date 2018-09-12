@@ -2,8 +2,6 @@ package com.yfbx.serialdemo;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.serialport.SerialPort;
-import android.serialport.SerialPortFinder;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -13,6 +11,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.deemons.serialportlib.SerialPortFinder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +25,6 @@ public class MainActivity extends Activity implements View.OnKeyListener, View.O
     EditText editText;
     CheckBox hexBtn;
     TextView retTxt;
-    SerialPort serialPort;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +32,6 @@ public class MainActivity extends Activity implements View.OnKeyListener, View.O
         setContentView(R.layout.activity_main);
         initView();
         initSpinner();
-        initSerialPort();
     }
 
     private void initView() {
@@ -58,8 +56,6 @@ public class MainActivity extends Activity implements View.OnKeyListener, View.O
         portSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list));
         baudSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, baudList));
 
-        //portSpinner.setSelection(10);
-        //baudSpinner.setSelection(16);
     }
 
 
@@ -75,45 +71,28 @@ public class MainActivity extends Activity implements View.OnKeyListener, View.O
         }
     }
 
-    private void initSerialPort() {
-        serialPort = new SerialPort();
-        new ReadThread().start();
-    }
-
     private void sendMsg(String msg) {
         String dev = portSpinner.getSelectedItem().toString();
         int baudRate = Integer.parseInt(baudSpinner.getSelectedItem().toString());
         Log.i(TAG, "串口：" + dev + "，波特率：" + baudRate);
-        serialPort.openSerial(dev, baudRate);
-
         byte[] data = hexBtn.isChecked() ? HexUtils.hexToByte(msg) : msg.getBytes();
-        serialPort.write(data);
-    }
 
-
-    class ReadThread extends Thread {
-        @Override
-        public void run() {
-            while (!isInterrupted()) {
-                byte[] read = serialPort.read(64);
-                onReadResult(read);
-            }
-        }
-    }
-
-
-    private void onReadResult(byte[] result) {
-        if (result == null) {
-            return;
-        }
-        final String ret = hexBtn.isChecked() ? HexUtils.byteToHex(result, result.length) : new String(result);
-        runOnUiThread(new Runnable() {
+        SerialTask.execute(dev, baudRate, data, new SerialTask.OnSerialCallback() {
             @Override
-            public void run() {
-                retTxt.append(ret);
-                retTxt.append("\n");
+            public void onReadResult(byte[] data) {
+                onResult(data);
             }
         });
+    }
+
+    private void onResult(byte[] result) {
+        if (result != null) {
+            String ret = hexBtn.isChecked() ?
+                    HexUtils.byteToHex(result, result.length)
+                    : new String(result);
+            retTxt.append(ret);
+            retTxt.append("\n");
+        }
     }
 
     @Override
@@ -123,12 +102,5 @@ public class MainActivity extends Activity implements View.OnKeyListener, View.O
             return true;
         }
         return false;
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        serialPort.close();
     }
 }
